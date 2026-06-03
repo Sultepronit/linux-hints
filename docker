@@ -1,0 +1,23 @@
+which dockerd
+
+
+sudo nano /etc/systemd/system/dockerd-nix.service
+-------------------------
+[Unit]
+Description=Docker Daemon (Nix)
+After=network.target
+
+[Service]
+Type=simple
+# Вставляємо ПОВНИЙ шлях, який нам видав which dockerd
+ExecStart=/home/YOUR_USER/.nix-profile/bin/dockerd -G docker
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+-------------------------
+
+sudo systemctl daemon-reload
+sudo systemctl restart dockerd-nix.service
+sudo systemctl status dockerd-nix.service

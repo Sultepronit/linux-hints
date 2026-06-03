@@ -1,0 +1,36 @@
+SET UP
+nix-channel --add https://channels.nixos.org/nixos-26.05 nixpkgs
+nix-channel --add https://github.com/nix-community/home-manager/archive/release-26.05.tar.gz home-manager
+nix-channel --update
+nix-shell '<home-manager>' -A install
+edit /home/ubuntu/.config/home-manager/home.nix
+home-manager switch
+
+? man home-configuration.nix ?
+
+ROUTINE
+home-manager packages
+
+nix-channel --update
+home-manager switch
+
+# 1. Видаляємо історію старих поколінь твого користувача (залишиться тільки поточне)
+nix-env --delete-generations old
+# 2. Якщо запускав home-manager, видаляємо і його історію відкатів
+home-manager expire-generations "-0 days"
+# 3. І ось тепер запускаємо фінальний "ядерний" удар по сміттю:
+nix-store --gc
+
+nix-store --optimise
+
+
+
+RELEASE UPGRADE
+# 1. Переводимо репозиторій пакетів на новий реліз
+nix-channel --add https://channels.nixos.org/nixos-26.11 nixpkgs
+# 2. Переводимо Home Manager на реліз 26.11
+nix-channel --add https://github.com/nix-community/home-manager/archive/release-26.11.tar.gz home-manager
+# 3. Викачуємо нові індекси
+nix-channel --update
+# 4. Застосовуємо!
+home-manager switch
