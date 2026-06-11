@@ -6,11 +6,13 @@ nix-channel --add https://channels.nixos.org/nixos-26.05 nixpkgs
 nix-channel --update
 
 ROUTINE
+nix-channel --remove ...
+
 nix-channel --list
 nix-channel --update
 
 nix profile list
-nix profile add
+nix profile add nixpkgs#
 nix profile remove
 nix profile upgrade --all
 nix profile history
