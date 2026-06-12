@@ -25,4 +25,5 @@ nix-store --optimise
 # Видаляємо історію старих поколінь твого користувача (залишиться тільки поточне)
 nix-env --delete-generations old
 
-
+nix-collect-garbage --delete-old
+nix-collect-garbage -d
