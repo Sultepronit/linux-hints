@@ -3,6 +3,7 @@ mkdir -p ~/.config/nix
 echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 
 nix-channel --add https://channels.nixos.org/nixos-26.05 nixpkgs
+nix-channel --add https://channels.nixos.org/nixos-unstable nixpkgs
 nix-channel --update
 
 ROUTINE
@@ -22,8 +23,9 @@ nix profile rollback --to 1
 nix-store --gc
 nix-store --optimise
 
-# Видаляємо історію старих поколінь твого користувача (залишиться тільки поточне)
 nix-env --delete-generations old
 
 nix-collect-garbage --delete-old
 nix-collect-garbage -d
+
+nix profile wipe-history --older-than 14d
