@@ -17,6 +17,7 @@ nix profile add nixpkgs#
 nix profile remove
 nix profile upgrade --all
 nix profile history
+nix profile diff-closures
 nix profile rollback
 nix profile rollback --to 1
 
@@ -27,5 +28,6 @@ nix-env --delete-generations old
 
 nix-collect-garbage --delete-old
 nix-collect-garbage -d
+nix-collect-garbage --delete-older-than 14d
 
 nix profile wipe-history --older-than 14d
