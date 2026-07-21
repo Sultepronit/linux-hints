@@ -31,3 +31,9 @@ nix-collect-garbage -d
 nix-collect-garbage --delete-older-than 14d
 
 nix profile wipe-history --older-than 14d
+
+
+sudo nano /etc/nix/nix.conf
+auto-optimise-store = true
+trusted-users = root @wheel (name instead of @wheel must?)
+sudo systemctl restart nix-daemon

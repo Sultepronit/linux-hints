@@ -1,0 +1,27 @@
+nano /etc/default/grub.d/99-zswap.cfg
+GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=zstd"
+(GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=zstd zswap.zpool=zsmalloc")
+update-grub
+sudo grep -r . /sys/kernel/debug/zswap/
+dmesg | grep zswap
+
+
+/sys/kernel/debug/zswap/stored_incompressible_pages:3936
+сторінки, які ядро визнало такими, що взагалі не піддаються стисненню, але zswap все одно залишив їх у себе в пулі, щоб зайвий раз не смикати диск
+
+/sys/kernel/debug/zswap/stored_pages:113138
+Стандартна сторінка в Linux — це 4 КБ. Тобто ядро спробувало скинути в своп приблизно 442 МБ чистої інформації.
+
+/sys/kernel/debug/zswap/pool_total_size:124399616
+124 399 616 байт. Це реальне місце, яке ці дані зараз займають у твоїй оперативці. Це приблизно 118 МБ.
+
+/sys/kernel/debug/zswap/written_back_pages:120
+кількість сторінок, які zswap не зміг втримати у пам'яті і все ж таки виштовхнув на твій реальний диск (у swapfile)
+
+/sys/kernel/debug/zswap/decompress_fail:0
+/sys/kernel/debug/zswap/reject_compress_poor:0
+/sys/kernel/debug/zswap/reject_compress_fail:0
+/sys/kernel/debug/zswap/reject_kmemcache_fail:0                                                                                                                   
+/sys/kernel/debug/zswap/reject_alloc_fail:0                                                                                                                       
+/sys/kernel/debug/zswap/reject_reclaim_fail:0                                                                                                                     
+/sys/kernel/debug/zswap/pool_limit_hit:0  
