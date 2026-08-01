@@ -1,0 +1,38 @@
+SET UP
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+sudo nano /etc/nix/nix.conf
+auto-optimise-store = true
+trusted-users = root @wheel (name instead of @wheel must?)
+sudo systemctl restart nix-daemon
+
+(nix-channel --remove ...)
+
+nix registry add st github:NixOS/nixpkgs/nixos-26.05
+nix registry list
+
+ROUTINE
+nix profile list
+nix profile add st#
+nix profile remove
+nix profile upgrade --all
+nix profile history
+nix profile diff-closures
+nix profile rollback
+nix profile rollback --to 1
+nix shell st# (nix-shell -p)!!!
+
+nix-store --gc
+nix-store --optimise
+
+nix-env --delete-generations old
+
+nix-collect-garbage --delete-old
+nix-collect-garbage -d
+nix-collect-garbage --delete-older-than 14d
+
+nix profile wipe-history --older-than 14d
+
+
+
