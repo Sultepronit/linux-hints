@@ -1,0 +1,41 @@
+UUID:
+findmnt -n -o UUID -T /swapfile
+resume_offset:
+filefrag -v /swapfile | awk '{if($1=="0:") print $4}' | tr -d '.'
+
+nano /etc/default/grub.d/99-zswap.cfg
+GRUB_CMDLINE_LINUX_DEFAULT="resume=UUID=*** resume_offset=*** zswap.enabled=1 zswap.compressor=zstd
+update-grub
+
+nano /etc/initramfs-tools/conf.d/resume
+RESUME=UUID=***
+update-initramfs -u -k all
+
+systemctl hibernate
+echo disk | sudo tee /sys/power/state
+lxqt-leave --hibernate
+
+# no need?
+sudo mkdir -p /etc/systemd/sleep.conf.d
+sudo nano /etc/systemd/sleep.conf.d/hibernate.conf
+[Sleep]
+AllowHibernation=yes
+HibernateMode=platform shutdown
+# no need?
+
+nano /etc/polkit-1/rules.d/50-enable-hibernate.rules
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.login1.hibernate" ||
+         action.id == "org.freedesktop.login1.hibernate-multiple-sessions") &&
+        subject.isInGroup("sudo")) {
+        return polkit.Result.YES;
+    }
+});
+
+systemctl restart polkit
+
+# no need?
+nano /etc/systemd/logind.conf
+HandleHibernateKey=hibernate
+systemctl restart systemd-logind
+# no need?

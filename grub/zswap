@@ -1,7 +1,9 @@
 nano /etc/default/grub.d/99-zswap.cfg
 GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=zstd"
 (GRUB_CMDLINE_LINUX_DEFAULT="zswap.enabled=1 zswap.compressor=zstd zswap.zpool=zsmalloc")
+(GRUB_CMDLINE_LINUX_DEFAULT="resume=UUID=bbf9e358-6ae3-44a6-8ca0-e83b3df3015f resume_offset=9209856 zswap.enabled=1 zswap.compressor=zstd zswap.max_pool_percent=20")
 update-grub
+grep "zswap" /boot/grub/grub.cfg
 sudo grep -r . /sys/kernel/debug/zswap/
 dmesg | grep zswap
 
